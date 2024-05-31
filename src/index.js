@@ -1,14 +1,13 @@
 // // require('dotenv').config({path: './env'}) // prev versions
-import 'dotenv/config'  // es6 version
+// *** using this -> nodemon -r dotenv/config --experimental-json-modules src/index.js ************
+import dotenv from "dotenv"
 import connectDB from "./db/index.js";
+import {app} from './app.js'
+dotenv.config({
+    path: './env'
+})
 
-// import dotenv from "dotenv"
 
-// dotenv.config({
-//         path: './env'
-// })
-    
-    
 connectDB()
 .then(() => {
     app.listen(process.env.PORT || 8000, () => {
@@ -18,6 +17,21 @@ connectDB()
 .catch((err) => {
     console.log("MONGO DB CONNECTION FAILED !!", err);
 }) 
+
+// ****** nodemon src/index.js -> using this ******
+
+// import 'dotenv/config'  // es6 version
+// import connectDB from "./db/index.js";
+// import {app} from './app.js'
+// connectDB()
+// .then(() => {
+//     app.listen(process.env.PORT || 8000, () => {
+//         console.log(`server is running at port: ${process.env.PORT}`);
+//     })
+// })
+// .catch((err) => {
+//     console.log("MONGO DB CONNECTION FAILED !!", err);
+// }) 
 
 // FOR SENDING REQUEST HOMAPAGE
 // import express from "express";
@@ -29,11 +43,11 @@ connectDB()
 // app.listen(process.env.PORT)
     
 
+// 2nd method 
+
 // import mongoose from "mongoose";
 // import { DB_NAME } from "./constant.js";
-
 // import express from "express"
-
 // const app = express()
 
 // ;( async () => {
