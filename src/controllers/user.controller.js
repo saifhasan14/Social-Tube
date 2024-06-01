@@ -7,9 +7,9 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 
 const registerUser = asyncHandler( async(req,res) => {
-    res.status(200).json({
-        message: "hello saif okay"
-    })
+    // res.status(200).json({
+    //     message: "hello saif okay"
+    // })
 
     // get user details from ffrontned
     // validation - not empty
@@ -23,7 +23,8 @@ const registerUser = asyncHandler( async(req,res) => {
     // return response
 
     const {fullName, email, username, password} = req.body
-    console.log("email: ", email);
+    // console.log("email: ", email);
+    // console.log("req.body: ", req.body);
     
     // if(fullName === ""){
     //     throw new ApiError(400, "full name is required")
@@ -37,7 +38,7 @@ const registerUser = asyncHandler( async(req,res) => {
         throw new ApiError(400, "All feilds are required")
     }
 
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         // for checking multiple fields at once or use => User.findOne(username)
         $or: [{ username }, { email }]
     })
@@ -46,8 +47,26 @@ const registerUser = asyncHandler( async(req,res) => {
         throw new ApiError(409, "user with email or username already exist")
     }
 
-    const avatartLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // console.log("req.files: ", req.files);
+    // console.log("req.files.avatar: ", req.files.avatar);
+
+    // gives error
+    // const avatartLocalPath = req.files?.avatar[0]?.path;
+    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+    let avatartLocalPath;
+    let coverImageLocalPath;
+    if(req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0){
+        avatartLocalPath = req.files.avatar[0].path
+    }
+
+    //wrong
+    // if(req.files && req.files.coverImage && req.files.coverImage[0]){
+    //     coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // }
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        coverImageLocalPath = req.files.coverImage[0].path
+    }
 
     if(!avatartLocalPath){
         throw new ApiError(400, "avatar file is required");
@@ -68,6 +87,7 @@ const registerUser = asyncHandler( async(req,res) => {
         password,
         username: username.toLowerCase()
     })
+    console.log("user: ",user);
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken" 
