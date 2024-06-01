@@ -22,9 +22,11 @@ const uploadOnCLoudinary = async (localFilePath) => {
     }
     catch(error){
         fs.unlinkSync(localFilePath) // remove the locally saved temporary file as the upload failed
+        return null;
     }
 }
 
+export {uploadOnCLoudinary}
 
 // Upload an image
 // const uploadResult = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg", {
