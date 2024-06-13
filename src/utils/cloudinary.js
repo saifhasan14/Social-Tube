@@ -17,8 +17,8 @@ const uploadOnCLoudinary = async (localFilePath) => {
             resource_type: "auto"
         })
         //file has been uploaded succesfully
-        console.log("file uploaded on cloudinary", response.url);
-        console.log("file uploaded on cloudinary", response);
+        // console.log("file uploaded on cloudinary", response.url);
+        // console.log("file uploaded on cloudinary", response);
         fs.unlinkSync(localFilePath);
         return response;
     }
@@ -28,9 +28,21 @@ const uploadOnCLoudinary = async (localFilePath) => {
     }
 }
 
-export {uploadOnCLoudinary}
+// const imageToBeDeleted = async(localFilePath) => {
+//     await cloudinary.uploader
+//     .destroy(localFilePath)
+//     // const response = await cloudinary.v2.api
+//     // .delete_resources([localFilePath], 
+//     // { type: "upload", resource_type: "auto" })
+// }
+
+
+export {
+    uploadOnCLoudinary,
+    // imageToBeDeleted
+}
 
 // Upload an image
 // const uploadResult = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg", {
 //     public_id: "shoes"
-// }).catch((error)=>{console.log(error)});
+// }).catch((error)=>{console.log(error)}); 
