@@ -1,7 +1,7 @@
 import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js ";
 import { User } from "../models/user.model.js";
-import {uploadOnCLoudinary} from "../utils/cloudinary.js";
+import {deleteOnCloudinary, uploadOnCLoudinary} from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -97,8 +97,14 @@ const registerUser = asyncHandler( async(req,res) => {
 
     const user = await User.create({
         fullName,
-        avatar: avatar.url,
-        coverImage: coverImage?.url || "",
+        avatar:{
+            url: avatar.url,
+            public_id: avatar.public_id 
+        },
+        coverImage:{
+            url: coverImage?.url || "",
+            public_id: coverImage?.public_id || ""
+        },
         email,
         password,
         username: username.toLowerCase()
@@ -338,30 +344,39 @@ const updateUserAvatar = asyncHandler( async(req,res) => {
     
     const avatar = await uploadOnCLoudinary(avatartLocalPath)
 
-    if(!avatar.url){
+    if(!avatar?.url){
         throw new ApiError(400, "Error while uploading avatar on cloudinary")
     }
 
-    const cloudinaryPath = await User.findById(req.user?._id).avatar
+    const user = await User.findById(req.user._id).select("avatar")
+    const avatarToDelete = user.avatar?.public_id;
 
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set:{
-                avatar: avatar.url
+                avatar: {
+                    url: avatar.url,
+                    public_id: avatar.public_id
+                }
             }
         },
         {new: true}
     ).select("-password -refreshToken")
 
+    if(!updatedUser.avatar.public_id){
+        throw new ApiError(500, "avatar updation failed")
+    }
+
     // for deleting on cloudinary
-    // console.log(cloudinaryPath);
-    // await imageToBeDeleted(cloudinaryPath)
+    if (avatarToDelete ) {
+        await deleteOnCloudinary(avatarToDelete);
+    }
 
     return res
     .status(200)
     .json(
-        new ApiResponse(200,user,"Avatar Image Uploaded Successfully")
+        new ApiResponse(200,updatedUser,"Avatar Image Uploaded Successfully")
     )
 
 })
@@ -373,34 +388,41 @@ const updateUserCoverImage = asyncHandler( async(req,res) => {
         throw new ApiError(400, "Cover Image file is missing")
     }
     
-    // todo: delete old image 
-
     const coverImage = await uploadOnCLoudinary(coverImageLocalPath)
 
     if(!coverImage.url){
         throw new ApiError(400, "Error while uploading cover image on cloudinary")
     }
 
-    const cloudinaryPath = await User.findById(req.user?._id).coverImage
+    const user = await User.findById(req.user?._id).select("coverImage")
+    const coverImageToDelete = user.coverImage.public_id
 
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $set:{
-                coverImage: coverImage.url
+                coverImage: {
+                    url: coverImage.url,
+                    public_id: coverImage.public_id
+                }
             }
         },
         {new: true}
     ).select("-password -refreshToken")
 
-    // for deleting on cloudinary
-    await imageToBeDeleted(cloudinaryPath)
+    if(!updatedUser.coverImage.public_id){
+        throw new ApiError(500, "coverImage updation failed")
+    }
 
+    // for deleting on cloudinary
+    if (coverImageToDelete ) {
+        await deleteOnCloudinary(coverImageToDelete);
+    }
 
     return res
     .status(200)
     .json(
-        new ApiResponse(200,user,"Cover Image Uploaded Successfully")
+        new ApiResponse(200,updatedUser,"Cover Image Uploaded Successfully")
     )
 
 })
@@ -422,10 +444,10 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
         },
         {
             $lookup: {
-                from: "subscriptions",
-                localField: "_id",
-                foreignField: "channel",
-                as: "subscribers"
+                from: "subscriptions", // The collection to join with
+                localField: "_id", // Field from the current collection (User) to match
+                foreignField: "channel", // Field from the 'subscriptions' collection to match
+                as: "subscribers" // Alias for the joined data
             }
         },
         {

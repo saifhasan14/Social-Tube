@@ -7,7 +7,7 @@ const userSchema = new Schema(
     {
         username: {
             type: String,
-            required: true,
+            required: [true, 'username is required'],
             unique: true,
             lowercase: true,
             trim: true,
@@ -27,11 +27,17 @@ const userSchema = new Schema(
             index: true
         },
         avatar: {
-            type: String, // cloudnary url
+            type: {
+                url: String, // cloudnary url
+                public_id: String
+            },
             required: true,
         },
         coverImage: {
-            type: String, // cloudnary url
+            type: {
+                url: String, // cloudnary url
+                public_id: String
+            }
         },
         watchHistory: [
             {
