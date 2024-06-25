@@ -498,7 +498,12 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
     return res
     .status(200)
     .json(
-        new ApiResponse(200, channel[0], "User channel fetched successfully")
+        new ApiResponse(
+            200,
+            //  channel is array with one object in it 
+            channel[0], 
+            "User channel fetched successfully"
+        )
     )
 })
 
@@ -506,26 +511,32 @@ const getWatchHistory = asyncHandler( async(req, res) => {
     
     const user = await User.aggregate([
         {
+            // find the current user
             $match: {
                 // _id: req.user._id  its wrong becuz ye direct jata hai without mongoose
                 _id: new mongoose.Types.ObjectId(req.user._id) // as userre.user._id give string
             },
         },
         {
+            // we will update watch history by its video detail aong with owner details
             $lookup: {
                 from: "videos",
                 localField: "watchHistory",
                 foreignField: "_id",
-                as: "watchHistory",
-                // sub-pipeline
+                as: "watchHistory", // it will override the previous one
+                // as: "myWatchHistory", it will create new feild along with "watchHistory"
+
+                // sub-pipeline for owner field
                 pipeline: [ 
                     {
                         $lookup:{
                             from: "users",
                             localField: "owner",
                             foreignField: "_id",
-                            as: "owner",
-                            //sub-pipeline
+                            as: "owner", // override previous owner feild
+                            // as: "newowner", // create new field
+
+                            //sub-pipeline for project of limited information from owner
                             pipeline: [
                                 {
                                     $project: {
@@ -539,8 +550,9 @@ const getWatchHistory = asyncHandler( async(req, res) => {
                     },
                     // as of now we have array with name owner
                     {
+                        // !!! without this all code will run
                         $addFields: {
-                            //overwriting existing feild
+                            //overwriting existing feild owner so that it has information 
                             owner: {
                                 $first: "$owner"
                             }
@@ -563,6 +575,8 @@ const getWatchHistory = asyncHandler( async(req, res) => {
     .json(
         new ApiResponse(
             200,
+            // print full user along with everything and it is array with one object in it
+            // user, 
             user[0].watchHistory, 
             "fetched User Watch History Successfully"
         )
