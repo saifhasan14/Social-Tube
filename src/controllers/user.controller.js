@@ -542,7 +542,8 @@ const getWatchHistory = asyncHandler( async(req, res) => {
                                     $project: {
                                         fullName: 1,
                                         username: 1,
-                                        avatar: 1
+                                        "avatar.url": 1
+                                        // avatar: 1
                                     }
                                 }
                             ]
@@ -568,7 +569,7 @@ const getWatchHistory = asyncHandler( async(req, res) => {
         throw new ApiError(404, "History not fetched" )
     }
 
-    // console.log("user history: ", user);
+    console.log("user history: ", user);
 
     return res
     .status(200)

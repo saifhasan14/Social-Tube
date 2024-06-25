@@ -4,9 +4,20 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 
+//TODO: toggle like on video
 const toggleVideoLike = asyncHandler(async (req, res) => {
     const {videoId} = req.params
-    //TODO: toggle like on video
+
+    if (!isValidObjectId(videoId)) {
+        throw new ApiError(400, "Invalid videoId");
+    }
+
+    const previouslyLiked = await Like.findOne({
+        video: videoId,
+    })
+
+
+
 })
 
 const toggleCommentLike = asyncHandler(async (req, res) => {

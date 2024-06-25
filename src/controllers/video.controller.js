@@ -1,10 +1,10 @@
-import mongoose, {isValidObjectId} from "mongoose"
-import {Video} from "../models/video.model.js"
-import {User} from "../models/user.model.js"
-import {ApiError} from "../utils/ApiError.js"
-import {ApiResponse} from "../utils/ApiResponse.js"
-import {asyncHandler} from "../utils/asyncHandler.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import mongoose, { isValidObjectId } from "mongoose"
+import { Video } from "../models/video.model.js"
+import { User } from "../models/user.model.js"
+import { ApiError } from "../utils/ApiError.js"
+import { ApiResponse } from "../utils/ApiResponse.js"
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
 
 
 //TODO: get all videos based on query, sort, pagination
@@ -14,22 +14,22 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
 // get video, upload to cloudinary, create video
 const publishAVideo = asyncHandler(async (req, res) => {
-    const { title, description} = req.body
+    const { title, description } = req.body
 
-    if(
-        [title, description].some( (feild) => {
+    if (
+        [title, description].some((feild) => {
             feild?.trim() === ""
         })
-    ){
+    ) {
         throw new ApiError(400, "tilte and description are required")
     }
 
     let videoLocalPath
     let thumbnailLocalPath
-    if(req.files && Array.isArray(req.files.video) && req.files.video.length > 0){
+    if (req.files && Array.isArray(req.files.video) && req.files.video.length > 0) {
         videoLocalPath = req.files.video[0].path
     }
-    if(req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length > 0){
+    if (req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length > 0) {
         thumbnailLocalPath = req.files.thumbnail[0].path
     }
 
@@ -70,13 +70,13 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
     const uploadedVideo = await Video.findById(video)
 
-    if(!uploadedVideo){
+    if (!uploadedVideo) {
         throw new ApiError(500, "Video uploading failed, Please try again !!! ")
     }
 
     return res
-    .status(200)
-    .json( new ApiResponse(200, uploadedVideo, "video Uploaded succesfully"))    
+        .status(200)
+        .json(new ApiResponse(200, uploadedVideo, "video Uploaded succesfully"))
 
 })
 
@@ -84,7 +84,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
 const getVideoById = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
-    if(!isValidObjectId(videoId)){
+    if (!isValidObjectId(videoId)) {
         throw new ApiError(400, "Invalid VideoId")
     }
 
@@ -162,11 +162,11 @@ const getVideoById = asyncHandler(async (req, res) => {
                     $first: "$owner" // overwrite
                 },
                 isLiked: {
-                    $cond:{
-                        if:{
-                            $in: [ req.user?._id, "$likes.likedBy"]
+                    $cond: {
+                        if: {
+                            $in: [req.user?._id, "$likes.likedBy"]
                         },
-                        then:true,
+                        then: true,
                         else: false
                     }
                 }
@@ -209,17 +209,17 @@ const getVideoById = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json( new ApiResponse(200, video[0], "video details fetched successfully"))
+        .json(new ApiResponse(200, video[0], "video details fetched successfully"))
 
 })
 
-//TODO: update video details like title, description, thumbnail
+// update video details like title, description, thumbnail
 const updateVideo = asyncHandler(async (req, res) => {
-    const {title, description} = req.body
+    const { title, description } = req.body
     const { videoId } = req.params
 
-    if( !videoId){
-        throw new ApiError(400, "Invalid video id" )
+    if (!videoId) {
+        throw new ApiError(400, "Invalid video id")
     }
 
     if (!(title && description)) {
@@ -232,7 +232,7 @@ const updateVideo = asyncHandler(async (req, res) => {
         throw new ApiError(404, "No video found");
     }
 
-    if(video?.owner.toString() !== req.user?._id.toString()){
+    if (video?.owner.toString() !== req.user?._id.toString()) {
         throw new ApiError(
             400,
             "You can't edit this video as you are not the owner"
@@ -282,11 +282,11 @@ const updateVideo = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json( new ApiResponse(200, updateVideo, "Video updated succesfully"))
+        .json(new ApiResponse(200, updateVideo, "Video updated succesfully"))
 
 })
 
-//TODO: delete video
+// delete video
 const deleteVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
@@ -300,7 +300,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
         throw new ApiError(404, "No video found");
     }
 
-    if(video.owner.toString() !== req.user?._id.toString()){
+    if (video.owner.toString() !== req.user?._id.toString()) {
         throw new ApiError(
             400,
             "You can't delete this video as you are not the owner"
@@ -320,22 +320,29 @@ const deleteVideo = asyncHandler(async (req, res) => {
     await deleteOnCloudinary(video.videoFile.public_id, "video"); // specify video while deleting video
 
     // delete video likes
-    await Like.deleteMany({
+    const result = await Like.deleteMany({ video: videoId })
+    if (result.acknowledged) {
+        console.log(`Deleted ${result.deletedCount} likes.`);
+    } else {
+        console.log('Deletion was not acknowledged.');
+    }
+    
+    // await Like.deleteMany({
+    //     video: videoId
+    // })
+
+    // delete video comments
+    await Comment.deleteMany({
         video: videoId
     })
 
-     // delete video comments
-    await Comment.deleteMany({
-        video: videoId,
-    })
-    
     return res
         .status(200)
         .json(new ApiResponse(200, {}, "Video deleted successfully"));
 
 })
 
-//  toggle publish status of a video
+// toggle publish status of a video
 const togglePublishStatus = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
@@ -349,7 +356,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Video not found");
     }
 
-    if(video.owner.toString() !== req.user?._id.toString()){
+    if (video.owner.toString() !== req.user?._id.toString()) {
         throw new ApiError(
             400,
             "You can't toggle this video as you are not the owner"
@@ -363,6 +370,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
                 isPublished: !video?.isPublished
             }
         },
+        // return the updated document
         {
             new: true
         }

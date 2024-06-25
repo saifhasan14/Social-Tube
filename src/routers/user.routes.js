@@ -12,6 +12,8 @@ import { registerUser,
     getWatchHistory, 
     } from "../controllers/user.controller.js";
 
+    import { getVideoComments } from "../controllers/comment.controller.js";
+
 import { upload} from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
