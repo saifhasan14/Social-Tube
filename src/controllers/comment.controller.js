@@ -29,6 +29,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
                 localField: "owner",
                 foreignField: "_id",
                 as: "owner",
+                // still array me hi milega
                 pipeline: [
                     {
                         $project: {
@@ -40,6 +41,11 @@ const getVideoComments = asyncHandler(async (req, res) => {
                 ]
             }
         },
+        // Use $unwind to convert the owner array into a single embedded object. 
+        // because here we will get owner array with one object in it so we ca use $unwind
+        // {
+        //     $unwind: "$owner"
+        // },
         {
             $lookup: {
                 from: "likes",
@@ -53,6 +59,7 @@ const getVideoComments = asyncHandler(async (req, res) => {
                 likesCount: {
                     $size: "$likes"
                 },
+                // to send owner as object not as array rewriting -> ref user.controller
                 owner: {
                     $first: "$owner"
                 },
@@ -80,8 +87,8 @@ const getVideoComments = asyncHandler(async (req, res) => {
                 //     fullName: 1,
                 //     "avatar.url": 1
                 // },
+                isLiked: 1,
                 owner: 1,
-                isLiked: 1
             }
         }
     ]);

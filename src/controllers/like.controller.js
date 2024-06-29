@@ -101,10 +101,9 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, { isLiked: true }, "tweet liked successfully"));
 })
 
-//  !!!!!!!!!!!!!!!!        use diffrent approaches  !!!!!!!!!!!!!!!!!!!!!!!!!
 //TODO: get all liked videos -> 
 const getLikedVideos = asyncHandler(async (req, res) => {
-
+    
     const likedVideosAggegate = await Like.aggregate([
         {
             $match: {
@@ -136,19 +135,34 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                                 }
                             ]
                         }
+                    },
+                    // use unwind so that the owner feild is object and not an array
+                    {
+                        $unwind: "$owner"
                     }
                 ]
             }
+        },
+        {
+            $unwind: "$likedVideos"
         },
         {
             $sort:{
                 createAt: -1
             }
         },
+        // {
+        //     $addFields: {
+        //         likedVideos: {
+        //             $first: "$likedVideos"
+        //         }
+        //     }
+        // },
         {
             $project: {
+                _id: 0, // of like model
                 likedVideos: {
-                    _id: 1,
+                    _id: 1, // of video model
                     "videoFile.url": 1,
                     "thumbnail.url": 1,
                     owner: 1,
@@ -166,8 +180,6 @@ const getLikedVideos = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(new ApiResponse(200, likedVideosAggegate, "liked videos fetched successfully" ))
-
-
 })
 
 export {
