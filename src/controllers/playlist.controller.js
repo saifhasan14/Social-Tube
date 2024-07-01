@@ -29,7 +29,7 @@ const createPlaylist = asyncHandler(async (req, res) => {
 
 })
 
-//TODO: get user playlists
+// get user playlists
 const getUserPlaylists = asyncHandler(async (req, res) => {
     const {userId} = req.params
 
@@ -76,6 +76,10 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
             }
         }
     ])
+
+    if(!playlists){
+        throw new ApiError(500, "error fetching playlist")
+    }
 
     return res
         .status(200)
