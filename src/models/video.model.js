@@ -48,6 +48,17 @@ const videoSchema = new Schema(
     }
 )
 
+// created in atlas search
+
+// videoSchema.index(
+//     {
+//         title: "text",
+//         description: "text"
+//     },
+//     {
+//         name: "search-videos"
+//     }
+// )
 
 videoSchema.plugin(mongooseAggregatePaginate)
 
