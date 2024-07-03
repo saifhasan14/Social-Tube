@@ -140,7 +140,7 @@ const getVideoById = asyncHandler(async (req, res) => {
                     },
                     {
                         $addFields: {
-                            susbscriberCount: {
+                            subscribersCount: {
                                 $size: "$subscribers"
                             },
                             isSubscribed: {
@@ -199,7 +199,7 @@ const getVideoById = asyncHandler(async (req, res) => {
                 // comments: 1, // we will get it by comments controller
                 owner: 1,
                 likesCount: 1,
-                isLiked: 1
+                isLiked: 1,
             }
         }
     ])
@@ -217,9 +217,12 @@ const getVideoById = asyncHandler(async (req, res) => {
 
     //add video to user watch history
     await User.findByIdAndUpdate(req.user?._id, {
-        $addToSet: {
+        $push: {
             watchHistory: videoId
         }
+        // $addToSet: {
+        //     watchHistory: videoId
+        // }
     })
 
     return res

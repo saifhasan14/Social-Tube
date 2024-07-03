@@ -31,7 +31,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     })
 
     return res
-        .status
+        .status(200)
         .json( new ApiResponse(200, { isLiked: true }, "video liked succesfully"))
 
 })
@@ -58,12 +58,12 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
     }
 
     await Like.create({
-        video: videoId,
+        comment: commentId,
         likedBy: req.user?._id
     })
 
     return res
-        .status
+        .status(200)
         .json( new ApiResponse(200, { isLiked: true }, "comment liked succesfully"))
 
 
@@ -115,7 +115,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                 from: "videos",
                 localField: "video",
                 foreignField: "_id",
-                as: "likedVideos",
+                as: "likedVideo",
 
                 pipeline: [
                     {
@@ -124,7 +124,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                             from: "users",
                             localField: "owner",
                             foreignField: "_id",
-                            as: "owner",
+                            as: "ownerDetails",
                             pipeline: [
                                 {
                                     $project: {
@@ -138,13 +138,13 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                     },
                     // use unwind so that the owner feild is object and not an array
                     {
-                        $unwind: "$owner"
+                        $unwind: "$ownerDetails"
                     }
                 ]
             }
         },
         {
-            $unwind: "$likedVideos"
+            $unwind: "$likedVideo"
         },
         {
             $sort:{
@@ -161,7 +161,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         {
             $project: {
                 _id: 0, // of like model
-                likedVideos: {
+                likedVideo: {
                     _id: 1, // of video model
                     "videoFile.url": 1,
                     "thumbnail.url": 1,
@@ -172,6 +172,12 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                     duration: 1,
                     createdAt: 1,
                     isPublished: 1,
+                    ownerDetails: 1,
+                    // ownerDetails: {
+                    //     username: 1,
+                    //     fullName: 1,
+                    //     "avatar.url": 1,
+                    // },
                 }
             }
         }

@@ -12,11 +12,8 @@ import { registerUser,
     getWatchHistory, 
     } from "../controllers/user.controller.js";
 
-    import { getVideoComments } from "../controllers/comment.controller.js";
-
 import { upload} from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { getLikedVideos } from "../controllers/like.controller.js";
 
 const router = Router()
 
@@ -51,10 +48,7 @@ router.route("/update-coverImage").patch(verifyJWT,upload.single("coverImage"), 
 
 
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
-router.route("/history").get(verifyJWT, getWatchHistory)
-
-//testing routes
-router.route("/getliked").get(verifyJWT, getLikedVideos)
+router.route("/watch-history").get(verifyJWT, getWatchHistory)
 
 
 export default router;
