@@ -1,1 +1,1 @@
-# backend learning 
+SocialTube is a comprehensive platform that merges video sharing with social media features, enabling users to engage with content and each other seamlessly. The platform allows users to upload, view, and interact with videos while incorporating interactive social features like posts and comments. Additionally, SocialTube includes a distinctive rating system that evaluates the credibility and reliability of both content and users based on their activity and comments.
