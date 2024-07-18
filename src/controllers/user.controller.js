@@ -304,6 +304,11 @@ const changeCurrentPassword = asyncHandler( async(res,req) => {
 })
 
 const getCurrentUser = asyncHandler( async(req, res) => {
+
+    // if(!req.user){
+    //     throw new ApiError(400, "user not logged in")
+    // }
+    
     return res
     .status(200)
     .json(
