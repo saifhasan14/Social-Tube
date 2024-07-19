@@ -245,12 +245,15 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
     let videoLocalPath
     let thumbnailLocalPath
-    if (req.files && Array.isArray(req.files.video) && req.files.video.length > 0) {
-        videoLocalPath = req.files.video[0].path
+    // videoLocalPath = req.files?.videoFile[0].path
+    // thumbnailLocalPath = req.files?.thumbnail[0].path
+    if (req.files && Array.isArray(req.files.videoFile) && req.files.videoFile.length > 0) {
+        videoLocalPath = req.files.videoFile[0].path
     }
     if (req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length > 0) {
         thumbnailLocalPath = req.files.thumbnail[0].path
     }
+    console.log(videoLocalPath);
 
     if (!videoLocalPath) {
         throw new ApiError(400, "videoLocalPath is required");
@@ -271,7 +274,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Thumbnail not found");
     }
 
-    const video = Video.create({
+    const video = await Video.create({
         title,
         description,
         duration: videoFile.duration,
@@ -287,7 +290,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
         isPublished: false
     })
 
-    const uploadedVideo = await Video.findById(video)
+    const uploadedVideo = await Video.findById(video._id)
 
     if (!uploadedVideo) {
         throw new ApiError(500, "Video uploading failed, Please try again !!! ")
@@ -442,7 +445,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Video not found");
     }
 
-    if (video.owner.toString() !== req.user?._id.toString()) {
+    if (video?.owner.toString() !== req.user?._id.toString()) {
         throw new ApiError(
             400,
             "You can't toggle this video as you are not the owner"
@@ -463,7 +466,7 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     )
 
     if (!toggledVideoPublish) {
-        throw new ApiError(500, "Failed to toogle video publish status");
+        throw new ApiError(500, "Failed to toggle video publish status");
     }
 
     return res
@@ -485,5 +488,5 @@ export {
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
 }
