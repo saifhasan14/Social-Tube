@@ -44,7 +44,7 @@ function App() {
 
     useEffect(() => {
         checkLoggedIn();
-    }, [dispatch]);
+    }, []);
 
     // useEffect(() => {
     //     dispatch(getCurrentUser());
