@@ -157,6 +157,7 @@ const loginUser = asyncHandler( async(req, res) => {
     }
 
     const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id)
+    
 
     // you can also update it by user saving one database call
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
@@ -591,7 +592,16 @@ const getWatchHistory = asyncHandler( async(req, res) => {
 
 })
 
-
+// imporvised 
+const checkLoggedIn = asyncHandler( async( req, res) => {
+    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+    if(token){
+        return res.status(200).json({haveToken: true})
+    }
+    else{
+        return res.status(200).json({haveToken: false})
+    }
+})
 
 export {
     registerUser,
@@ -604,5 +614,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    checkLoggedIn,
 }
