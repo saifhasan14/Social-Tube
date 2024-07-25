@@ -12,7 +12,7 @@ import { uploadOnCloudinary, deleteOnCloudinary } from "../utils/cloudinary.js"
 //TODO: get all videos based on query, sort, pagination
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query
-    console.log(userId);
+    // console.log(userId);
     const pipeline = [];
 
     // for using Full Text based search u need to create a search index in mongoDB atlas
@@ -253,7 +253,6 @@ const publishAVideo = asyncHandler(async (req, res) => {
     if (req.files && Array.isArray(req.files.thumbnail) && req.files.thumbnail.length > 0) {
         thumbnailLocalPath = req.files.thumbnail[0].path
     }
-    console.log(videoLocalPath);
 
     if (!videoLocalPath) {
         throw new ApiError(400, "videoLocalPath is required");
@@ -399,7 +398,7 @@ const deleteVideo = asyncHandler(async (req, res) => {
     // const videoDeleted = await Video.findByIdAndDelete(videoId)
     // return the deleted document
     const videoDeleted = await Video.findByIdAndDelete(video?._id)
-    console.log(videoDeleted);
+    // console.log(videoDeleted);
 
     if (!videoDeleted) {
         throw new ApiError(400, "Failed to delete the video please try again");
@@ -410,11 +409,11 @@ const deleteVideo = asyncHandler(async (req, res) => {
 
     // delete video likes
     const result = await Like.deleteMany({ video: videoId })
-    if (result.acknowledged) {
-        console.log(`Deleted ${result.deletedCount} likes.`);
-    } else {
-        console.log('Deletion was not acknowledged.');
-    }
+    // if (result.acknowledged) {
+    //     console.log(`Deleted ${result.deletedCount} likes.`);
+    // } else {
+    //     console.log('Deletion was not acknowledged.');
+    // }
     
     // await Like.deleteMany({
     //     video: videoId

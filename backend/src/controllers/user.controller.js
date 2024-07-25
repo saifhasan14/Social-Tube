@@ -275,8 +275,9 @@ const refreshAccessToken = asyncHandler( async(req,res) => {
 
 })
 
-const changeCurrentPassword = asyncHandler( async(res,req) => {
+const changeCurrentPassword = asyncHandler( async(req, res) => {
     const {oldPassword, newPassword} = req.body
+
 
     // const {oldPassowrd, newPassword, confPassword} = req.body
     // if(!(newPassword === confPassword)){
@@ -298,7 +299,7 @@ const changeCurrentPassword = asyncHandler( async(res,req) => {
     return res
     .status(200)
     .json(
-        new ApiResponse( 200, {}, "Password Changes Succesfully")
+        new ApiResponse( 200, req.user, "Password Changes Succesfully")
     )
 
 
@@ -329,7 +330,7 @@ const updateUserDetail = asyncHandler( async(req, res) => {
         {
             $set:{
                 fullName,
-                email: email
+                email,
             }
         },
         {new: true}
