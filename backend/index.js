@@ -1,8 +1,8 @@
 // // require('dotenv').config({path: './env'}) // prev versions
 // *** using this -> nodemon -r dotenv/config --experimental-json-modules src/index.js ************
 import dotenv from "dotenv"
-import connectDB from "./db/index.js";
-import {app} from './app.js'
+import connectDB from "./src/db/db.js"
+import {app} from "./src/app.js";
 dotenv.config({
     path: './.env'
 })
