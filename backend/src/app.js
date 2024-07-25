@@ -20,7 +20,9 @@ app.use(express.static("public"))
 app.use(cookieParser())
 app.use(morgan("dev")); //HTTP request logger middleware for node.js 
 
-
+app.get("/api/v1/test", (req, res) => {
+    res.status(200).json({message : "backend is working"})
+})
 
 //routes import
 import userRouter from "./routes/user.routes.js"
