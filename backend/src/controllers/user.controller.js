@@ -23,9 +23,6 @@ const generateAccessAndRefreshToken = async(userId) => {
 }
 
 const registerUser = asyncHandler( async(req,res) => {
-    // res.status(200).json({
-    //     message: "hello saif okay"
-    // })
 
     // get user details from frontned
     // validation - not empty
@@ -39,13 +36,6 @@ const registerUser = asyncHandler( async(req,res) => {
     // return response
 
     const {fullName, email, username, password} = req.body
-    console.log("email: ", email);
-    // console.log("req.body: ", req.body);
-    
-    // if(fullName === ""){
-    //     throw new ApiError(400, "full name is required")
-    // }
-    // advance syntax for not writing multilpe if condn
 
     if(
         [fullName, email, username, password].some( (field) => 
@@ -63,12 +53,24 @@ const registerUser = asyncHandler( async(req,res) => {
         throw new ApiError(409, "user with email or username already exist")
     }
 
-    // console.log("req.files: ", req.files);
-    // console.log("req.files.avatar: ", req.files.avatar);
+    // let avatarBuffer;
+    // let coverImageBuffer;
 
-    // gives error
-    // const avatartLocalPath = req.files?.avatar[0]?.path;
-    // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    // if (req.files && Array.isArray(req.files.avatar) && req.files.avatar.length > 0) {
+    //     avatarBuffer = req.files.avatar[0].buffer;
+    // }
+
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageBuffer = req.files.coverImage[0].buffer;
+    // }
+
+    // if (!avatarBuffer) {
+    //     throw new ApiError(400, "Avatar file is required");
+    // }
+
+    // const avatar = await uploadOnCloudinary(avatarBuffer, "avatar");
+    // const coverImage = coverImageBuffer ? await uploadOnCloudinary(coverImageBuffer, "coverImage") : null;
+
 
     let avatartLocalPath;
     let coverImageLocalPath;
@@ -81,7 +83,7 @@ const registerUser = asyncHandler( async(req,res) => {
     //     coverImageLocalPath = req.files?.coverImage[0]?.path;
     // }
     if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
-        coverImageLocalPath = req.files.coverImage[0].path
+        coverImageLocalPath = req.files.coverImage[0]?.path
     }
 
     if(!avatartLocalPath){
@@ -92,7 +94,7 @@ const registerUser = asyncHandler( async(req,res) => {
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
     if(!avatar){
-        throw new ApiError(400, "avatar file is required");
+        throw new ApiError(400, "error on uploading");
     }
 
     const user = await User.create({

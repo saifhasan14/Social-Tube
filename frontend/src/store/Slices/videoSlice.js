@@ -46,9 +46,17 @@ export const publishAvideo = createAsyncThunk("publishAvideo", async (data) => {
     formData.append("description", data.description);
     formData.append("videoFile", data.videoFile[0]);
     formData.append("thumbnail", data.thumbnail[0]);
+    
+    console.log("data: ", data);
+    console.log("fomrData: ", formData);
 
     try {
-        const response = await axiosInstance.post("/video", formData);
+        const response = await axiosInstance.post("/video", formData, );
+        // const response = await axiosInstance.post("/video", formData, {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data"
+        //     }
+        //   });
         toast.success(response?.data?.message);
         return response.data.data;
     } catch (error) {

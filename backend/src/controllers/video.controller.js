@@ -243,6 +243,46 @@ const publishAVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "tilte and description are required")
     }
 
+    console.log(title, description);
+
+    // let videoBuffer, thumbnailBuffer;
+    // console.log(req.files);
+
+    // if (req.files && req.files.videoFile) {
+    //     videoBuffer = req.files.videoFile[0].buffer;
+    // }
+
+    // if (req.files && req.files.thumbnail) {
+    //     thumbnailBuffer = req.files.thumbnail[0].buffer;
+    // }
+
+    // if (!videoBuffer) {
+    //     throw new ApiError(400, "Video file is required");
+    // }
+
+    // if (!thumbnailBuffer) {
+    //     throw new ApiError(400, "Thumbnail file is required");
+    // }
+    // console.log("video buffer", videoBuffer);
+    // console.log("thumnail ", thumbnailBuffer);
+    // console.log("Uploading video to Cloudinary...");
+    // const videoFile = await uploadOnCloudinary(videoBuffer, "videos");
+    // console.log("Video upload response:", videoFile);
+
+    // console.log("Uploading thumbnail to Cloudinary...");
+    // const thumbnail = await uploadOnCloudinary(thumbnailBuffer, "thumbnails");
+    // console.log("Thumbnail upload response:", thumbnail);
+
+    // if (!videoFile) {
+    //     throw new ApiError(500, "Error uploading video to Cloudinary");
+    // }
+
+    // if (!thumbnail) {
+    //     throw new ApiError(500, "Error uploading thumbnail to Cloudinary");
+    // }
+
+    // UPLOAD USING LOCAL
+
     let videoLocalPath
     let thumbnailLocalPath
     // videoLocalPath = req.files?.videoFile[0].path
@@ -272,6 +312,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
     if (!thumbnail) {
         throw new ApiError(400, "Thumbnail not found");
     }
+
+    console.log("videoFile", videoFile);
 
     const video = await Video.create({
         title,
