@@ -103,13 +103,19 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
     try {
         const response = await axiosInstance.get("/users/current-user");
         // console.log(response);
-        return response.data.data;
+        if(response.data.data.haveToken){
+            return response.data.data.user;
+        }
+        else{
+            return null;
+        }
 
     } catch (error) {
         toast.error(error?.response?.data?.error);
         throw error;
     }
 });
+
 
 
 export const updateAvatar = createAsyncThunk("updateAvatar", async (avatar) => {
@@ -190,10 +196,20 @@ const authSlice = createSlice({
         builder.addCase(getCurrentUser.pending, (state) => {
             state.loading = true;
         });
+        // builder.addCase(getCurrentUser.fulfilled , (state, action) => {
+        //     state.loading = false;
+        //     state.status = true;
+        //     state.userData = action.payload;
+        // });
         builder.addCase(getCurrentUser.fulfilled, (state, action) => {
             state.loading = false;
-            state.status = true;
-            state.userData = action.payload;
+            if (action.payload) {
+                state.status = true;
+                state.userData = action.payload || null;
+            } else {
+                state.status = false;
+                state.userData = null;
+            }
         });
         builder.addCase(getCurrentUser.rejected, (state) => {
             state.loading = false;

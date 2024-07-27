@@ -46,7 +46,7 @@ const getChannelStats = asyncHandler(async (req, res) => {
     //     }
     // ]);
 
-    const videoStats = Video.aggregate([
+    const videoStats = await Video.aggregate([
         {
             $match:  {
                 owner: new mongoose.Types.ObjectId(userId)
@@ -67,7 +67,7 @@ const getChannelStats = asyncHandler(async (req, res) => {
                     $size: "$likes"
                 },
                 totalViews: "$views",
-                // totalVideos: 1               
+                totalVideos: 1               
             }
         },
         // The $group stage in MongoDB's aggregation framework is used to group documents by a specified identifier expression and perform aggregate operations (such as sum, average, etc.) on grouped data. 
@@ -77,11 +77,11 @@ const getChannelStats = asyncHandler(async (req, res) => {
                 _id: null,
 
                 // This line creates a new field called totalLikes in the output document.
-                $totalLikes: {
-                    $sum: "totalLikes"
+                totalLikes: {
+                    $sum: "$totalLikes"
                 },
                 totalViews: {
-                    $sum: "totalViews"
+                    $sum: "$totalViews"
                 },
                 // This line creates a new field called totalVideos in the output document.
                 totalVideos: {

@@ -309,19 +309,6 @@ const changeCurrentPassword = asyncHandler( async(req, res) => {
 
 })
 
-const getCurrentUser = asyncHandler( async(req, res) => {
-
-    // if(!req.user){
-    //     throw new ApiError(400, "user not logged in")
-    // }
-    
-    return res
-    .status(200)
-    .json(
-        new ApiResponse(200, req.user, "Current User fetched successfully")
-    )
-})
-
 const updateUserDetail = asyncHandler( async(req, res) => {
     const{fullName, email} = req.body
 
@@ -597,16 +584,27 @@ const getWatchHistory = asyncHandler( async(req, res) => {
 
 })
 
-// imporvised 
-const checkLoggedIn = asyncHandler( async( req, res) => {
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
-    if(token){
-        return res.status(200).json({haveToken: true})
-    }
-    else{
-        return res.status(200).json({haveToken: false})
-    }
+const getCurrentUser = asyncHandler( async(req, res) => {
+    const user = req.user;
+
+    return res
+        .status(200)
+        .json(
+            // new ApiResponse(200, req.user, "Current User fetched successfully")
+            new ApiResponse(200, {haveToken: true, user}, "Current User fetched successfully")
+        )
 })
+
+// imporvised 
+// const checkLoggedIn = asyncHandler( async( req, res) => {
+//     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+//     if(token){
+//         return res.status(200).json({haveToken: true})
+//     }
+//     else{
+//         return res.status(200).json({haveToken: false})
+//     }
+// })
 
 export {
     registerUser,
@@ -620,5 +618,4 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory,
-    checkLoggedIn,
 }

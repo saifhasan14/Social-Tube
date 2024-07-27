@@ -10,11 +10,11 @@ import { registerUser,
     updateUserCoverImage, 
     getUserChannelProfile, 
     getWatchHistory,
-    checkLoggedIn 
     } from "../controllers/user.controller.js";
 
 import { upload} from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { currentCheck } from "../middlewares/current.middleware.js";
 
 const router = Router()
 
@@ -40,7 +40,7 @@ router.route("/logout").post(verifyJWT, logoutUser)
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 
-router.route("/current-user").get(verifyJWT, getCurrentUser)
+router.route("/current-user").get(currentCheck ,verifyJWT, getCurrentUser)
 
 router.route("/update-user").patch(verifyJWT, updateUserDetail)
 
@@ -50,7 +50,6 @@ router.route("/update-coverImg").patch(verifyJWT,upload.single("coverImage"), up
 
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
 router.route("/watch-history").get(verifyJWT, getWatchHistory)
-router.route("/check-logged-in").get(checkLoggedIn)
 
 
 export default router;

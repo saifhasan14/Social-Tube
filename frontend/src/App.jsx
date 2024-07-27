@@ -2,7 +2,7 @@ import React, { useEffect} from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthLayout, Login, SignUp } from "./components/index";
 import { Toaster } from "react-hot-toast";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { getCurrentUser } from "./store/Slices/authSlice";
 import {
     History,
@@ -23,33 +23,14 @@ import {
 
 import { EditPersonalInfo, ChangePassword, Layout } from "./components";
 
-import axiosInstance from "../src/helpers/axiosInstance.js";
 
 function App() {
 
     const dispatch = useDispatch();
 
-    const checkLoggedIn = ( async () => {
-        try {
-            const response = await axiosInstance.get("/users/check-logged-in");
-            // console.log(response);
-            if(response.data.haveToken){
-                dispatch(getCurrentUser());
-            }
-        } catch (error) {
-            throw error;
-        }
-    
-    });
-
     useEffect(() => {
-        checkLoggedIn();
-    }, []);
-
-    // useEffect(() => {
-    //     dispatch(getCurrentUser());
-    // }, [useDispatch])
-
+        dispatch(getCurrentUser());
+    }, [useDispatch])
 
     return  ( 
         <>

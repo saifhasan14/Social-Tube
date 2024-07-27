@@ -62,7 +62,7 @@ const getUserPlaylists = asyncHandler(async (req, res) => {
                     $sum: "$videos.views"
                 }
             }
-
+            
         },
         {
             $project: {
