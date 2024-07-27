@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     BiHistory,
     BiLike,
@@ -12,8 +12,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { IoMdLogOut } from "react-icons/io";
 import { userLogout } from "../../store/Slices/authSlice";
+import Logo from "../Logo";
+import { SlMenu } from "react-icons/sl";
+import { MdClose } from "react-icons/md";
 
 function Sidebar() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const username = useSelector((state) => state.auth?.userData?.username);
@@ -78,6 +82,10 @@ function Sidebar() {
         navigate("/");
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen((prev) => !prev);
+    };
+
     return (
         <>
             <div className="sm:block hidden">
@@ -87,9 +95,7 @@ function Sidebar() {
                             <NavLink
                                 to={item.url}
                                 key={item.title}
-                                className={({ isActive }) =>
-                                    isActive ? "bg-purple-500" : ""
-                                }
+                                className={({ isActive }) => (isActive ? "bg-purple-500" : "")}
                             >
                                 <div className="flex items-center gap-2 justify-center sm:justify-start hover:bg-purple-500 cursor-pointer py-1 px-2 border border-slate-600">
                                     {item.icon}
@@ -108,16 +114,12 @@ function Sidebar() {
                                 onClick={() => logout()}
                             >
                                 <IoMdLogOut size={25} />
-                                <span className="text-base hidden md:block">
-                                    Logout
-                                </span>
+                                <span className="text-base hidden md:block">Logout</span>
                             </div>
                         )}
                         <div className="flex items-center gap-2 justify-center sm:justify-start hover:bg-purple-500 cursor-pointer py-1 px-2 border border-slate-600">
                             <CiSettings size={25} />
-                            <span className="text-base hidden md:block">
-                                Settings
-                            </span>
+                            <span className="text-base hidden md:block">Settings</span>
                         </div>
                     </div>
                 </div>
@@ -129,9 +131,7 @@ function Sidebar() {
                     <NavLink
                         to={item.url}
                         key={item.title}
-                        className={({ isActive }) =>
-                            isActive ? "text-purple-500" : ""
-                        }
+                        className={({ isActive }) => (isActive ? "text-purple-500" : "")}
                     >
                         <div className="flex flex-col items-center gap-1 cursor-pointer p-1">
                             {item.icon}
@@ -145,3 +145,61 @@ function Sidebar() {
 }
 
 export default Sidebar;
+
+{/* <div className="sm:block hidden">
+    <div
+        className={`text-white fixed top-0 left-0 h-screen bg-[#0F0F0F] z-50 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out w-64`}
+    >
+        <div className="flex justify-between items-center p-4 border-b border-gray-600">
+            <Logo />
+            <MdClose
+                size={30}
+                className="text-white cursor-pointer"
+                onClick={toggleSidebar}
+            />
+        </div>
+        <div className="flex flex-col gap-4 mt-5 p-4">
+            {sidebarTopItems.map((item) => (
+                <NavLink
+                    to={item.url}
+                    key={item.title}
+                    className={({ isActive }) => (isActive ? "bg-purple-500" : "")}
+                    onClick={toggleSidebar}
+                >
+                    <div className="flex items-center gap-2 justify-start hover:bg-purple-500 hover:text-white cursor-pointer py-2 px-4 border border-slate-600">
+                        {item.icon}
+                        <span className="text-base hidden md:block">
+                            {item.title}
+                        </span>
+                    </div>
+                </NavLink>
+            ))}
+        </div>
+        <div className="p-4 border-t border-gray-600">
+            {username && (
+                <div
+                    className="flex items-center gap-2 justify-start hover:bg-purple-500 hover:text-white cursor-pointer py-2 px-4 border border-slate-600"
+                    onClick={() => (logout(), toggleSidebar())}
+                >
+                    <IoMdLogOut size={25} />
+                    <span className="text-base hidden md:block">Logout</span>
+                </div>
+            )}
+            <div
+                className="flex items-center gap-2 justify-start hover:bg-purple-500 hover:text-white cursor-pointer py-2 px-4 border border-slate-600"
+                onClick={toggleSidebar}
+            >
+                <CiSettings size={25} />
+                <span className="text-base hidden md:block">Settings</span>
+            </div>
+        </div>
+    </div>
+    <div className="fixed top-4 left-4 z-50">
+        <SlMenu
+            size={20}
+            className="text-white cursor-pointer"
+            onClick={toggleSidebar}
+        />
+    </div>
+</div> */}

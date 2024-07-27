@@ -32,13 +32,13 @@ function SearchVideos() {
     const handleSortParams = (newSortBy, newSortType = "asc") => {
         setSearchParms({ sortBy: newSortBy, sortType: newSortType });
     };
-
-    if (videos?.totalDocs === 0) {
-        return <NoVideosFound text={"Try searching something else"} />;
-    }
-
+    
     if (loading) {
         return <HomeSkeleton />;
+    }
+
+    if (videos?.docs?.length === 0) {
+        return <NoVideosFound text={"Try searching something else"} />;
     }
 
     return (

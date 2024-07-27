@@ -49,7 +49,9 @@ function Navbar() {
 
                 {/* search for large screens */}
                 <div className="w-full sm:w-1/3 hidden sm:block">
-                    <Search />
+                    <div>
+                        <Search />
+                    </div>
                 </div>
 
                 {/* search for small screens */}
@@ -102,8 +104,16 @@ function Navbar() {
                 </div>
 
                 {/* Side bar for smaller screens */}
-                {toggleMenu && (
-                    <div className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none">
+                {/* {toggleMenu && (
+                    <div className="fixed right-0 top-0 text-white flex flex-col border-l h-screen w-[70%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none  "> */}
+                    
+                    <div
+                        className={`fixed top-0 right-0 text-white flex flex-col border-l h-screen w-[60%] bg-[#0F0F0F] sm:hidden rounded-lg outline-none transform ${
+                            toggleMenu ? "translate-x-0" : "translate-x-full"
+                        } transition-transform duration-500 ease-in-out z-50`}
+                    >
+
+
                         <div className="w-full border-b h-20 flex items-center mb-2 justify-between px-3">
                             <div className="flex items-center gap-2">
                                 <Logo />
@@ -161,7 +171,6 @@ function Navbar() {
                             )}
                         </div>
                     </div>
-                )}
             </nav>
         </>
     );

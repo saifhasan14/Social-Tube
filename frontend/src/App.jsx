@@ -145,6 +145,14 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="/collections"
+                        element={
+                            <AuthLayout authentication>
+                                <AdminDashboard />
+                            </AuthLayout>
+                        }
+                    />
                 </Route>
                 <Route
                     path="/login"
@@ -170,14 +178,14 @@ function App() {
                         </AuthLayout>
                     }
                 />
-                <Route
+                {/* <Route
                     path="/collections"
                     element={
                         <AuthLayout authentication>
                             <AdminDashboard />
                         </AuthLayout>
                     }
-                />
+                /> */}
                 <Route
                     path="/terms&conditions"
                     element={

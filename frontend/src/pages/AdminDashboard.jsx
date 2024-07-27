@@ -50,7 +50,7 @@ function AdminDashboard() {
 
     return (
         <>
-            <Navbar />
+            {/* <Navbar /> */}
             <Container>
                 <div className=" w-full relative h-screen text-white space-y-5 z-10 py-4 px-1">
                     {/* uploadVideoPopup */}
