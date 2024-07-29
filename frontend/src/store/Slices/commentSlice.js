@@ -50,7 +50,7 @@ export const deleteAComment = createAsyncThunk(
             const response = await axiosInstance.delete(
                 `/comment/c/${commentId}`
             );
-            toast.success(response.data.message);
+            toast.success(response.data?.message);
             // console.log(response.data.data);
             return response.data.data;
         } catch (error) {

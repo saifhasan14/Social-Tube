@@ -8,6 +8,7 @@ import tweetSlice from "./Slices/tweetSlice.js";
 import commentSlice from "./Slices/commentSlice.js";
 import dashboardSlice from "./Slices/dashboard.js";
 import playlistSlice from "./Slices/playlistSlice.js";
+import ratingSlice from "./Slices/ratingSlice.js";
 
 const store = configureStore({
     reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
         tweet: tweetSlice,
         comment: commentSlice,
         dashboard: dashboardSlice,
-        playlist: playlistSlice
+        playlist: playlistSlice,
+        rating: ratingSlice
     }
 });
 

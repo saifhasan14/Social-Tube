@@ -18,6 +18,7 @@ import {
 
 function VideoDetail() {
     const dispatch = useDispatch();
+    
     const { videoId } = useParams();
     const video = useSelector((state) => state.video?.video);
     const comments = useSelector((state) => state.comment?.comments);

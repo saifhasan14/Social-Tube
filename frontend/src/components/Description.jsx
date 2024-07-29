@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { timeAgo } from "../helpers/timeAgo";
-import { Like, Button } from "./index";
+import { Like, Button, Rating } from "./index";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toggleSubscription } from "../store/Slices/subscriptionSlice";
@@ -33,14 +33,38 @@ function Description({
         }
     };
 
-    const handleSubsribe = () => {};
+    const handleSubsribe = () => { };
     return (
         <>
             <section className="sm:max-w-4xl w-full text-white sm:p-5 p-2 space-y-2">
                 <div className="border-b border-slate-700">
                     <div className="space-y-2 mb-2">
                         <h1 className="sm:text-2xl font-semibold">{title}</h1>
-                        <div className="flex items-center justify-between sm:justify-start sm:gap-5">
+                        {/* <div className="flex items-center justify-between sm:justify-start gap-5 bg-red-800"> */}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex items-center  justify-between sm:justify-start sm:gap-5"> 
+                                <div>
+                                    <span className="text-sm text-slate-400">
+                                        {views} views .{" "}
+                                    </span>
+                                    <span className="text-sm text-slate-400">
+                                        {timeAgo(createdAt)}
+                                    </span>
+                                </div>
+                                {/* <div className="rounded-full w-24 flex justify-center bg-[#222222] py-2">
+                                    <Like
+                                        isLiked={isLiked}
+                                        videoId={videoId}
+                                        likesCount={likesCount}
+                                        size={25}
+                                    />
+                                </div> */}
+                            </div>   
+                            <div className=" flex w-auto justify-center rounded-full bg-[#222222] py-2 px-6 my-1">
+                                <Rating />
+                            </div>
+                        </div>
+                        {/* <div className="flex items-center  justify-between sm:justify-start sm:gap-5">
                             <div>
                                 <span className="text-sm text-slate-400">
                                     {views} views .{" "}
@@ -57,7 +81,7 @@ function Description({
                                     size={25}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="flex gap-2 justify-between items-center">
                             <Link
                                 to={`/channel/${channelName}/videos`}

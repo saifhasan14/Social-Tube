@@ -37,6 +37,7 @@ import LoginPopup from "./LoginPopup ";
 import AuthLayout from "./AuthLayout";
 import InfiniteScroll from "./InfiniteScroll"
 import SearchForSmallScreen from "./SearchForSmallScreen";
+import Rating from "./Rating";
 
 export {
     Button,
@@ -77,5 +78,6 @@ export {
     LoginPopup,
     AuthLayout,
     InfiniteScroll,
-    SearchForSmallScreen
+    SearchForSmallScreen,
+    Rating,
 };
