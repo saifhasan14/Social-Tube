@@ -32,6 +32,7 @@ function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
             dispatch(toggleVideoLike(videoId));
         }
     };
+
     useEffect(() => {
         setLocalIsLiked(isLiked);
         setLocalLikesCount(likesCount);
@@ -47,7 +48,9 @@ function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
                     size={size}
                     onClick={()=>{
                         handleLikeToggle()
-                        // handleDislikeToggle()
+                        if(localIsDisliked){
+                            handleDislikeToggle()
+                        }
                     }}
                     className={`cursor-pointer ${
                         localIsLiked ? "text-purple-500" : ""
@@ -57,8 +60,10 @@ function Like({ isLiked, likesCount = 0, tweetId, commentId, videoId, size }) {
                 <BiSolidDislike 
                     size={size}
                     onClick={() => {
-                        handleDislikeToggle(),
-                        handleLikeToggle()
+                        handleDislikeToggle();
+                        if(localIsLiked){
+                            handleLikeToggle()
+                        }
                     }}
                     className={`cursor-pointer ${
                         localIsDisliked ? "text-purple-500" : ""

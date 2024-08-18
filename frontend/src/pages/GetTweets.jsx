@@ -14,26 +14,27 @@ function GetTweets() {
     }, [dispatch]);
 
     return (
-        <>
-        {authId === userId && <TweetAndComment tweet={true} />}
-        <div
-            className="overflow-y-auto h-screen"  // Make this container scrollable with full screen height
-            style={{ maxHeight: "80vh", padding: "10px" }}  // Optional: max height and padding
-        >
-            {allTweets?.map((tweet) => (
-                <TweetsList
-                    key={tweet?._id}
-                    avatar={tweet?.ownerDetails?.avatar.url}
-                    content={tweet?.content}
-                    createdAt={tweet?.createdAt}
-                    likesCount={tweet?.likesCount}
-                    tweetId={tweet?._id}
-                    username={tweet?.ownerDetails?.username}
-                    isLiked={tweet?.isLiked}
+        <div className="h-screen flex flex-col">
+            {/* {authId === userId && <TweetAndComment tweet={true} />} */}
+            <TweetAndComment tweet={true} />
+            <div
+                className="overflow-y-auto flex-grow"  // Flex-grow allows this div to take up remaining space and become scrollable
+                style={{ padding: "10px" }}
+            >
+                {allTweets?.map((tweet) => (
+                    <TweetsList
+                        key={tweet?._id}
+                        avatar={tweet?.ownerDetails?.avatar?.url}
+                        content={tweet?.content}
+                        createdAt={tweet?.createdAt}
+                        likesCount={tweet?.likesCount}
+                        tweetId={tweet?._id}
+                        username={tweet?.ownerDetails?.username}
+                        isLiked={tweet?.isLiked}
                     />
                 ))}
+            </div>
         </div>
-        </>
     );
 }
 
