@@ -5,6 +5,86 @@ import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 
+//get all tweets
+const getAllTweets = asyncHandler(async (req, res) => {
+    
+    // const allTweets = await Tweet.find();
+
+    const allTweets = await Tweet.aggregate([
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "ownerDetails",
+                pipeline: [
+                    {
+                        $project: {
+                            username: 1,
+                            "avatar.url": 1,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $lookup: {
+                from: "likes",
+                localField: "_id",
+                foreignField: "tweet",
+                as: "likeDetails",
+                pipeline: [
+                    {
+                        $project: {
+                            likedBy: 1,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $addFields: {
+                likesCount: {
+                    $size: "$likeDetails",
+                },
+                ownerDetails: {
+                    $first: "$ownerDetails",
+                },
+                isLiked: {
+                    $cond: {
+                        if: {$in: [req.user?._id, "$likeDetails.likedBy"]},
+                        then: true,
+                        else: false
+                    }
+                }
+            },
+        },
+        {
+            $sort: {
+                createdAt: -1
+            }
+        },
+        {
+            $project: {
+                content: 1,
+                ownerDetails: 1,
+                likesCount: 1,
+                createdAt: 1,
+                isLiked: 1
+            },
+        },
+    ])
+
+    if (!allTweets) {
+        throw new ApiError(500, "failed to fetch tweets");
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, allTweets, "Tweet fetched"));
+
+})
+
 // create tweet
 const createTweet = asyncHandler(async (req, res) => {
     const {content} = req.body
@@ -287,6 +367,7 @@ const deleteTweet = asyncHandler(async (req, res) => {
 })
 
 export {
+    getAllTweets,
     createTweet,
     getUserTweets,
     updateTweet,

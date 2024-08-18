@@ -19,6 +19,7 @@ import {
     SearchVideos,
     TermsAndConditions,
     ChannelPlaylist,
+    GetTweets
 } from "./pages";
 
 import { EditPersonalInfo, ChangePassword, Layout } from "./components";
@@ -117,6 +118,14 @@ function App() {
                         element={
                             <AuthLayout authentication>
                                 <MySubscriptions />
+                            </AuthLayout>
+                        }
+                    />
+                    <Route
+                        path="/getAllTweets"
+                        element={
+                            <AuthLayout authentication>
+                                <GetTweets />
                             </AuthLayout>
                         }
                     />

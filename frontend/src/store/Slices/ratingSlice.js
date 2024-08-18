@@ -16,7 +16,6 @@ export const getRating = createAsyncThunk(
             const response = await axiosInstance.get(
                 `/rating/average/${videoId}`
             );
-            console.log(response);
             // toast.error(response.data.data);
             return response.data.data;
         } catch (error) {

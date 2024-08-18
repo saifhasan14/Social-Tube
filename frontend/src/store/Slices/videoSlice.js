@@ -47,8 +47,8 @@ export const publishAvideo = createAsyncThunk("publishAvideo", async (data) => {
     formData.append("videoFile", data.videoFile[0]);
     formData.append("thumbnail", data.thumbnail[0]);
     
-    console.log("data: ", data);
-    console.log("fomrData: ", formData);
+    // console.log("data: ", data);
+    // console.log("fomrData: ", formData);
 
     try {
         const response = await axiosInstance.post("/video", formData, );

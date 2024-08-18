@@ -507,13 +507,20 @@ const getUserChannelProfile = asyncHandler(async(req,res) => {
 })
 
 const getWatchHistory = asyncHandler( async(req, res) => {
+
+    const id = req.user._id.toString();
     
+    // const userId = new mongoose.Types.ObjectId(id)
+    const userId = mongoose.Types.ObjectId.createFromHexString(id)
+
     const user = await User.aggregate([
         {
             // find the current user
             $match: {
                 // _id: req.user._id  its wrong becuz ye direct jata hai without mongoose
-                _id: new mongoose.Types.ObjectId(req.user._id) // as userre.user._id give string
+                // _id: mongoose.Types.ObjectId(req.user._id)
+                _id: userId
+                // _id: new mongoose.Types.ObjectId(req.user._id) // as req.user._id give string
             },
         },
         {
@@ -567,8 +574,6 @@ const getWatchHistory = asyncHandler( async(req, res) => {
     if(!user?.length){
         throw new ApiError(404, "History not fetched" )
     }
-
-    console.log("user history: ", user);
 
     return res
     .status(200)

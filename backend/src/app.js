@@ -5,6 +5,19 @@ import morgan from "morgan";
 
 
 const app = express()
+
+// const allowedOrigins = ['http://192.168.29.129:5173', 'http://localhost:5173'];
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true
+// }));
+
 app.use(cors({
     // origin: "http://localhost:5173",
     origin: "https://social-tube.vercel.app",

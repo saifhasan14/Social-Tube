@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 const initialState = {
     loading: false,
     tweets: [],
+    allTweets: [],
 };
 
 export const createTweet = createAsyncThunk("createTweet", async (content) => {
@@ -57,6 +58,17 @@ export const getUserTweets = createAsyncThunk( "getUserTweets", async (userId) =
     }
 );
 
+export const getAllTweets = createAsyncThunk( "getAllTweets", async () => {
+    try {
+        const response = await axiosInstance.get("/tweet/getAllTweets");
+        return response.data.data;
+        
+    } catch (error) {
+        toast.error(error?.response?.data?.error);
+        throw error;
+    }
+})
+
 const tweetSlice = createSlice({
     name: "tweet",
     initialState,
@@ -69,12 +81,24 @@ const tweetSlice = createSlice({
         builder.addCase(getUserTweets.fulfilled, (state, action) => {
             state.loading = false;
             state.tweets = action.payload;
+            
         });
         builder.addCase(createTweet.fulfilled, (state, action) => {
             state.tweets.unshift(action.payload);
-        })
+        });
         builder.addCase(deleteTweet.fulfilled, (state, action) => {
             state.tweets = state.tweets.filter((tweet) => tweet._id !== action.payload);
+            state.allTweets = state.allTweets.filter((tweet) => tweet._id !== action.payload)
+        });
+        builder.addCase(getAllTweets.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllTweets.fulfilled, (state, action) => {
+            state.loading = false;
+            state.allTweets = action.payload;
+        })
+        builder.addCase(getAllTweets.rejected, (state) => {
+            state.loading = false;
         })
     },
 });

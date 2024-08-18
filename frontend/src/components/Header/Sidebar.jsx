@@ -52,6 +52,11 @@ function Sidebar() {
             title: "Subscriptions",
             url: "/subscriptions",
         },
+        {
+            icon: <TbUserCheck size={25} />,
+            title: "Tweets",
+            url: "/getAllTweets",
+        },
     ];
 
     const bottomBarItems = [
@@ -74,6 +79,11 @@ function Sidebar() {
             icon: <TbUserCheck size={25} />,
             title: "Subscriptions",
             url: "/subscriptions",
+        },
+        {
+            icon: <TbUserCheck size={25} />,
+            title: "Tweets",
+            url: "/getAllTweets",
         },
     ];
 

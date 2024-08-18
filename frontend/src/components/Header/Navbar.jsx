@@ -150,19 +150,19 @@ function Navbar() {
                             {!authStatus ? (
                                 <div className="flex flex-col space-y-5 mb-3">
                                     <Link to={"/login"}>
-                                        <Button className="w-full bg-[#222222] border hover:bg-white hover:text-black border-slate-500 py-1 px-3">
+                                        <Button className="w-full bg-[#222222] border hover:bg-white hover:text-black border-slate-500 py-2 px-3">
                                             Login
                                         </Button>
                                     </Link>
                                     <Link to={"/signup"}>
-                                        <Button className=" w-full font-semibold border border-slate-500 hover:bg-white hover:text-black py-1 px-3">
+                                        <Button className=" w-full font-semibold border border-slate-500 hover:bg-white hover:text-black py-2 px-3">
                                             Sign up
                                         </Button>
                                     </Link>
                                 </div>
                             ) : (
                                 <div
-                                    className="flex gap-2 justify-start items-start cursor-pointer py-1 px-2 border border-slate-600"
+                                    className="flex gap-2 justify-start items-start cursor-pointer mb-7 py-2 px-2 border border-slate-600"
                                     onClick={() => logout()}
                                 >
                                     <IoMdLogOut size={25} />
