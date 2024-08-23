@@ -313,14 +313,14 @@ const publishAVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Thumbnail not found");
     }
 
-    console.log("videoFile", videoFile);
+    // console.log("videoFile", videoFile);
 
     const video = await Video.create({
         title,
         description,
         duration: videoFile.duration,
         videoFile: {
-            url: videoFile.url,
+            url: videoFile.secure_url,
             public_id: videoFile.public_id
         },
         thumbnail: {

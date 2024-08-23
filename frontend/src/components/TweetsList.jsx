@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Like, DeleteConfirmation, Edit } from "./index";
 import { HiOutlineDotsVertical } from "./icons";
 import { deleteTweet, editTweet } from "../store/Slices/tweetSlice";
+import { useNavigate } from "react-router-dom";
 
 function TweetsList({
     tweetId,
@@ -19,6 +20,7 @@ function TweetsList({
     const avatar2 = useSelector((state) => state.auth?.userData?.avatar?.url);
     const authUsername = useSelector((state) => state.auth?.userData?.username);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [editState, setEditState] = useState({
         editing: false,
@@ -50,8 +52,8 @@ function TweetsList({
 
     return (
         <>
-            <div className="text-white w-full flex justify-start items-center sm:gap-5 gap-3 border-b border-slate-600 p-3 sm:p-5">
-                <div className="w-10">
+            <div className="text-white w-full flex justify-start items-center sm:gap-5 gap-3  border-t border-slate-600 p-3 sm:p-5">
+                <div className="w-10 cursor-pointer" onClick={() => navigate(`/channel/${username}`)}>
                     <img
                         src={avatar || avatar2}
                         className="w-8 h-8 object-cover rounded-full"

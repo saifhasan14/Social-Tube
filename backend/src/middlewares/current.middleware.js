@@ -12,7 +12,7 @@ export const currentCheck = asyncHandler( async(req, res, next) => {
         return res
         .status(200)
         .json(
-            new ApiResponse(200, {haveToken: false}, "Current User fetched successfully but not token ")
+            new ApiResponse(200, {haveToken: false}, "Current User fetched successfully but does not have token ")
         )
     }
 }) 
