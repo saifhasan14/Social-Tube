@@ -167,7 +167,7 @@ const loginUser = asyncHandler( async(req, res) => {
     const options = { // only modifies by server hence secure
         httpOnly: true,
         secure: true,
-        SameSite: "Lax"
+        SameSite: "None"
     }
 
     return res.status(200)
@@ -211,7 +211,7 @@ const logoutUser = asyncHandler( async(req, res) => {
     const options = { // only modifies by server hence secure
         httpOnly: true,
         secure: true,
-        SameSite: "Lax"
+        SameSite: "None"
     }
 
     return res
