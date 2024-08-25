@@ -2,17 +2,17 @@ import React from "react";
 
 function Video({ src, poster }) {
     return (
-        <>
-
-            <video
-                src={src}
-                poster={poster}
-                autoPlay
-                controls
-                playsInline
-                className="sm:h-[68vh] sm:max-w-4xl h-64 w-full object-contain"
-            ></video>
-        </>
+        <video
+            ref={(video) => {
+                if (video) video.volume = 0.5; // Set the default volume to 50%
+            }}
+            src={src}
+            poster={poster}
+            autoPlay
+            controls
+            playsInline
+            className="sm:h-[68vh] sm:max-w-4xl h-64 w-full object-contain"
+        ></video>
     );
 }
 

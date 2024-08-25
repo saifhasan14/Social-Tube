@@ -48,6 +48,7 @@ function VideoDetail() {
             <Navbar />
             <Video
                 src={video?.videoFile?.url}
+                publicId={video?.videoFile?.publicId}
                 poster={video?.thumbnail?.url}
             />
             <Description
