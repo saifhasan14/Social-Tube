@@ -57,7 +57,8 @@ function SignUp() {
                                     name="coverImage"
                                     control={control}
                                     className="w-full h-28 object-cover border-none border-slate-900"
-                                    cameraIcon
+                                    cameraIcon={true}
+                                    isRequired={false}
                                 />
                                 <div className="text-sm absolute right-2 bottom-2 hover:text-purple-500 cursor-default">
                                     cover Image

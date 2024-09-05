@@ -20,7 +20,7 @@ function Channel() {
             {channel && (
                 <ChannelHeader
                     username={username}
-                    coverImage={channel?.coverImage.url}
+                    coverImage={channel?.coverImage?.url}
                     avatar={channel?.avatar.url}
                     subscribedCount={channel?.channelsSubscribedToCount}
                     fullName={channel?.fullName}
