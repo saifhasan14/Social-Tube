@@ -1,5 +1,7 @@
 # SocialTube: A Next-Gen Video Sharing Platform Along With Social Media
 
+Deployed link - https://social-tube.vercel.app/
+
 Welcome to SocialTube! This platform revolutionizes how users interact with video content by integrating advanced rating systems, direct user interactions, tweet-like posts, and robust admin tools for maintaining content quality.
 
 ## Table of Contents
